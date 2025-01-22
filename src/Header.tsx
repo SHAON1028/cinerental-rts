@@ -4,11 +4,13 @@ import cartIcon from "./assets/shopping-cart.svg";
 import ringIcon from "./assets/ring.svg";
 import { useState } from "react";
 import { Cart } from "./cine/Cart";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
 const Header = () => {
 
   const [showCart, setShowCart] = useState(false);
 
-
+const { totalQuantity,items} = useSelector((state: RootState) => state.cart);
 const handleShowCart = ()=>{
 
   setShowCart(true)
@@ -20,10 +22,7 @@ const handleCloseCart = ()=>{
 }
   return (
     <>
-
-    {
-      showCart && <Cart onClose={handleCloseCart}/>
-    }
+      {showCart && <Cart onClose={handleCloseCart} />}
       <header>
         <nav className="container flex items-center justify-between space-x-10 py-6">
           <a href="index.html">
@@ -49,12 +48,20 @@ const handleCloseCart = ()=>{
             </li>
             <li>
               <a
-                className="bg-primary/20 dark:bg-primary/[7%] rounded-lg backdrop-blur-[2px] p-1 inline-block"
+                className="bg-primary/20 dark:bg-primary/[7%] rounded-lg backdrop-blur-[2px] p-1 inline-block relative"
                 href="#"
-
-                onClick={(e)=>{e.preventDefault();handleShowCart()}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleShowCart();
+                }}
               >
                 <img src={cartIcon} width="24" height="24" alt="" />
+
+                {items.length > 0 && (
+                  <span className="absolute -top-4 -right-3 inline-flex items-center rounded-full bg-red-500 text-white px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                    {totalQuantity}
+                  </span>
+                )}
               </a>
             </li>
           </ul>
